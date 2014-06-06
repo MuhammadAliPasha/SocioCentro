@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SocioCentro14</string>
+    <string name="action_settings">Settings</string>
+    <string name="fb_title">Facebook</string>
+    <string name="ig_title">Instagram</string>
+    <string name="tw_title">Twitter</string>
+    <string name="fb_client_id">fbclientid</string>
+    <string name="fb_client_secret">fbclientsectret</string>
+    <string name="fb_auth_url">https://www.facebook.com</string>
+    <string name="fb_token_url">https://www.facebook.com</string>
+    <string name="ig_client_id">b28b8c13378e456fba00c2c8fff6ed65</string>
+    <string name="ig_client_secret">6d503fd20d07412a87ac178193704038</string>
+    <string name="ig_auth_url">https://api.instagram.com/oauth/authorize/</string>
+    <string name="ig_token_url">https://api.instagram.com/oauth/access_token</string>
+    <string name="tw_client_id">9V7kdHLBnf3hFTnQa4M9caO3C</string>
+    <string name="tw_client_secret">Z8WMaBKV3iO91DHCHmO76WTspj6wTXmvqjgoyFdZSF0dqvhH4E</string>
+    <string name="tw_auth_url">https://www.twitter.com</string>
+    <string name="tw_token_url">https://www.twitter.com</string>
+    <string name="ig_api_url">https://api.instagram.com/v1</string>
+    <string name="callback_url">https://www.simple-complexity.com</string>
+
+</resources>

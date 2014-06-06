@@ -1,4 +1,4 @@
-package com.sociocentro14.login;
+package com.sociocentro.login;
 
 public interface IAuthDialogListener {
 	

@@ -1,7 +1,7 @@
-package com.sociocentro14.login;
+package com.sociocentro.login;
 
-import com.sociocentro14.R;
-import com.sociocentro14.login.handler.LoginHandler;
+import com.sociocentro.login.handler.LoginHandler;
+import com.sociocentro.R;
 
 import android.app.Fragment;
 import android.os.Bundle;

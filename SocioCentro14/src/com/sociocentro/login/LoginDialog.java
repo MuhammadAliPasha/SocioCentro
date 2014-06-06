@@ -1,7 +1,7 @@
-package com.sociocentro14.login;
+package com.sociocentro.login;
 
-import com.sociocentro14.login.handler.LoginHandler.AuthenticationDialogListener;
-import com.sociocentro14.R;
+import com.sociocentro.login.handler.LoginHandler.AuthenticationDialogListener;
+import com.sociocentro.R;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
@@ -63,6 +65,9 @@ public class LoginDialog extends DialogFragment{
 		webView.setScrollBarStyle(0);
 		webView.setWebViewClient(new AuthWebViewClient());
 		webView.setWebChromeClient(new AuthWebChromeClient());
+		webView.setMinimumHeight(200);
+		Log.d("webview Height", Integer.toString(webView.getHeight()));
+		Log.d("webview Width", Integer.toString(webView.getWidth()));
 	}
 
 	public class AuthWebViewClient extends WebViewClient {
@@ -79,6 +84,8 @@ public class LoginDialog extends DialogFragment{
 				textView.setText(title);
 			}
 			LoginDialog.this.dismissDialog();
+			Log.d("webview Height", Integer.toString(webView.getHeight()));
+			Log.d("webview Width", Integer.toString(webView.getWidth()));
 		}
 
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {

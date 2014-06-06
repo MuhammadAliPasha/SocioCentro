@@ -1,8 +1,9 @@
-package com.sociocentro14;
+package com.sociocentro;
 
 import java.util.Locale;
 
-import com.sociocentro14.login.LoginMain;
+import com.sociocentro.login.LoginMain;
+import com.sociocentro.R;
 
 import android.app.Activity;
 import android.app.ActionBar;

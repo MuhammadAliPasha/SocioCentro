@@ -1,4 +1,4 @@
-package com.sociocentro14.login.handler;
+package com.sociocentro.login.handler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,10 +18,10 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.sociocentro14.R;
-import com.sociocentro14.login.IAuthListener;
-import com.sociocentro14.login.LoginDialog;
-import com.sociocentro14.login.SessionStore;
+import com.sociocentro.login.IAuthListener;
+import com.sociocentro.login.LoginDialog;
+import com.sociocentro.login.SessionStore;
+import com.sociocentro.R;
 
 public class LoginHandler {
 
@@ -79,7 +79,7 @@ public class LoginHandler {
 		progressDialog.setCancelable(false);
 	}
 
-	public class AuthenticationDialogListener implements com.sociocentro14.login.IAuthDialogListener {
+	public class AuthenticationDialogListener implements com.sociocentro.login.IAuthDialogListener {
 
 		@Override
 		public void onComplete(String token) {

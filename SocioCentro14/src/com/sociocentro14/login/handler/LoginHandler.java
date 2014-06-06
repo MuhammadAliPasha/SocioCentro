@@ -132,6 +132,10 @@ public class LoginHandler {
 				String username = userJsonObject.getString("username");
 				String name = userJsonObject.getString("full_name");
 				sessionStore.saveInstagramSession(id, username, name, accessToken);
+				Log.d("id", id);
+				Log.d("user", username);
+				Log.d("name", name);
+				Log.d("ac", accessToken);
 				//LoadHomePage
 			}
 			catch (Exception e) {

@@ -16,7 +16,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.sociocentro.login.IAuthListener;
 import com.sociocentro.login.LoginDialog;

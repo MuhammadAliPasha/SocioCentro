@@ -4,23 +4,27 @@ import com.sociocentro.login.handler.LoginHandler.AuthenticationDialogListener;
 import com.sociocentro.R;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 @SuppressLint({ "ValidFragment", "SetJavaScriptEnabled" })
@@ -39,37 +43,64 @@ public class LoginDialog extends DialogFragment{
 	}
 	
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Dialog dialog = super.onCreateDialog(savedInstanceState);
-		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-		return dialog; 
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		Dialog dialog = super.onCreateDialog(savedInstanceState);
+		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View view = inflater.inflate(R.layout.fragment_dialog_login, null);
-		textView = (TextView) view.findViewById(R.id.dialogTextView);
-		webView = (WebView) view.findViewById(R.id.dialogWebView);
-		initWebView();
+		builder.setView(view);
+		initWidgets(dialog, view);
+		
+		progressDialog = new ProgressDialog(getActivity());
 		webView.loadUrl(url);
 		CookieSyncManager.createInstance(getActivity());
 		CookieManager cookieManager = CookieManager.getInstance();
 		cookieManager.removeAllCookie();
-		progressDialog = new ProgressDialog(getActivity());
-		return view;
+		return dialog; 
 	}
-
-	private void initWebView() {
+	
+	private void initWidgets(Dialog dialog, View view) {
+		LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.dialogLinearLayout);
+		textView = new TextView(getActivity());
+		textView.setText("Login");
+		textView.setTextColor(Color.WHITE);
+		textView.setBackgroundColor(Color.BLACK);
+		textView.setPadding(20, 10, 10, 10);
+		linearLayout.addView(textView);
+		
+		webView = new WebView(getActivity());
+		webView.setVerticalScrollBarEnabled(true);
+		webView.setHorizontalScrollBarEnabled(true);
+		webView.setLayoutParams(new FrameLayout.LayoutParams(
+				ViewGroup.LayoutParams.MATCH_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT));
+		linearLayout.addView(webView);
+		
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.clearCache(true);  
 		webView.setScrollBarStyle(0);
 		webView.setWebViewClient(new AuthWebViewClient());
 		webView.setWebChromeClient(new AuthWebChromeClient());
-		webView.setMinimumHeight(200);
-		Log.d("webview Height", Integer.toString(webView.getHeight()));
-		Log.d("webview Width", Integer.toString(webView.getWidth()));
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
+		float[] portrait = {width, height};
+		float[] landscape = {height, width};
+		
+		float[] dimensions = (width < height) ? portrait : landscape;
+		Log.d("webview w x h", (int) (dimensions[0] * 0.95) + " x " + (int) (dimensions[1] * 0.5));
+		dialog.addContentView(linearLayout, new FrameLayout.LayoutParams((int) (dimensions[0] * 0.95), (int) (dimensions[1] * 0.5)));
 	}
-
+	
 	public class AuthWebViewClient extends WebViewClient {
 
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {

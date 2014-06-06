@@ -56,7 +56,7 @@ public class LoginHandler {
 			client_id = activity.getResources().getString(R.string.ig_client_id);
 			client_secret = activity.getResources().getString(R.string.ig_client_secret);
 			authURLString = activity.getResources().getString(R.string.ig_auth_url) + "?client_id=" + client_id + "&redirect_uri=" + CALLBACK_URL + "&response_type=code&display=touch&scope=likes+comments+relationships";
-			tokenURLString = activity.getResources().getString(R.string.fb_token_url) + "?client_id=" + client_id + "&client_secret=" + client_secret + "&redirect_uri=" + CALLBACK_URL + "&grant_type=authorization_code";
+			tokenURLString = activity.getResources().getString(R.string.ig_token_url) + "?client_id=" + client_id + "&client_secret=" + client_secret + "&redirect_uri=" + CALLBACK_URL + "&grant_type=authorization_code";
 			accessToken = sessionStore.getInstagramAccessToken();
 			socialMedia = INSTAGRAM;
 			break;
@@ -132,14 +132,9 @@ public class LoginHandler {
 				String username = userJsonObject.getString("username");
 				String name = userJsonObject.getString("full_name");
 				sessionStore.saveInstagramSession(id, username, name, accessToken);
-				Log.d("id", id);
-				Log.d("user", username);
-				Log.d("name", name);
-				Log.d("ac", accessToken);
 				//LoadHomePage
 			}
 			catch (Exception e) {
-				authenticationListener.onFail("Failed to get access token");
 				e.printStackTrace();
 			}
 			return null;

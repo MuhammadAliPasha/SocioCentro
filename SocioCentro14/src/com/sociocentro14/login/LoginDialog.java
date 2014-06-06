@@ -31,7 +31,7 @@ public class LoginDialog extends DialogFragment{
 	private WebView webView;
 	private boolean isShowing = false;
 
-	public LoginDialog(String url, AuthenticationDialogListener AuthenticationDialogListener) {
+	public LoginDialog(String url, AuthenticationDialogListener authenticationDialogListener) {
 		this.url = url;
 		this.authenticationDialogListener = authenticationDialogListener;
 	}
@@ -78,15 +78,12 @@ public class LoginDialog extends DialogFragment{
 			if (title != null && title.length() > 0) {
 				textView.setText(title);
 			}
-			Log.d("Login Dialog", "On Page Finished URL: " + url);
 			LoginDialog.this.dismissDialog();
 		}
 
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			if (url.startsWith(getResources().getString(R.string.callback_url))) {
-				System.out.println(url);
 				String urls[] = url.split("=");
-				//try because cancel
 				authenticationDialogListener.onComplete(urls[1]);
 				LoginDialog.this.dismiss();
 				return true;

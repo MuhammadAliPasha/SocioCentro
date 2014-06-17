@@ -16,8 +16,9 @@
     <string name="ig_token_url">https://api.instagram.com/oauth/access_token</string>
     <string name="tw_client_id">9V7kdHLBnf3hFTnQa4M9caO3C</string>
     <string name="tw_client_secret">Z8WMaBKV3iO91DHCHmO76WTspj6wTXmvqjgoyFdZSF0dqvhH4E</string>
-    <string name="tw_auth_url">https://www.twitter.com</string>
-    <string name="tw_token_url">https://www.twitter.com</string>
+    <string name="tw_request_token_url">https://api.twitter.com/oauth/request_token</string>
+    <string name="tw_authorize_url">https://api.twitter.com/oauth/authorize</string>
+    <string name="tw_authenticate_url">https://api.twitter.com/oauth/authenticate</string>
     <string name="ig_api_url">https://api.instagram.com/v1</string>
     <string name="callback_url">https://www.simple-complexity.com</string>
 

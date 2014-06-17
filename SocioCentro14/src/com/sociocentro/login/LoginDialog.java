@@ -1,6 +1,5 @@
 package com.sociocentro.login;
 
-import com.sociocentro.login.handler.LoginHandler.AuthenticationDialogListener;
 import com.sociocentro.R;
 
 import android.annotation.SuppressLint;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager.LayoutParams;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
@@ -31,13 +29,13 @@ import android.widget.TextView;
 public class LoginDialog extends DialogFragment{
 
 	private String url;
-	private AuthenticationDialogListener authenticationDialogListener;
+	private IAuthDialogListener authenticationDialogListener;
 	private ProgressDialog progressDialog;
 	private TextView textView;
 	private WebView webView;
 	private boolean isShowing = false;
 
-	public LoginDialog(String url, AuthenticationDialogListener authenticationDialogListener) {
+	public LoginDialog(String url, IAuthDialogListener authenticationDialogListener) {
 		this.url = url;
 		this.authenticationDialogListener = authenticationDialogListener;
 	}
@@ -48,32 +46,8 @@ public class LoginDialog extends DialogFragment{
 	}
 	
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Dialog dialog = super.onCreateDialog(savedInstanceState);
-		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-		
+	public Dialog onCreateDialog(Bundle savedInstanceState) {		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View view = inflater.inflate(R.layout.fragment_dialog_login, null);
-		builder.setView(view);
-		initWidgets(dialog, view);
-		
-		progressDialog = new ProgressDialog(getActivity());
-		webView.loadUrl(url);
-		CookieSyncManager.createInstance(getActivity());
-		CookieManager cookieManager = CookieManager.getInstance();
-		cookieManager.removeAllCookie();
-		return dialog; 
-	}
-	
-	private void initWidgets(Dialog dialog, View view) {
-		LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.dialogLinearLayout);
-		textView = new TextView(getActivity());
-		textView.setText("Login");
-		textView.setTextColor(Color.WHITE);
-		textView.setBackgroundColor(Color.BLACK);
-		textView.setPadding(20, 10, 10, 10);
-		linearLayout.addView(textView);
 		
 		webView = new WebView(getActivity());
 		webView.setVerticalScrollBarEnabled(true);
@@ -81,42 +55,58 @@ public class LoginDialog extends DialogFragment{
 		webView.setLayoutParams(new FrameLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT));
-		linearLayout.addView(webView);
-		
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.clearCache(true);  
 		webView.setScrollBarStyle(0);
 		webView.setWebViewClient(new AuthWebViewClient());
 		webView.setWebChromeClient(new AuthWebChromeClient());
+		webView.getSettings().setAllowFileAccess(true);
 		
-		DisplayMetrics displaymetrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		int height = displaymetrics.heightPixels;
-		int width = displaymetrics.widthPixels;
-		float[] portrait = {width, height};
-		float[] landscape = {height, width};
+		builder.setView(webView);
 		
-		float[] dimensions = (width < height) ? portrait : landscape;
-		Log.d("webview w x h", (int) (dimensions[0] * 0.95) + " x " + (int) (dimensions[1] * 0.5));
-		dialog.addContentView(linearLayout, new FrameLayout.LayoutParams((int) (dimensions[0] * 0.95), (int) (dimensions[1] * 0.5)));
+		progressDialog = new ProgressDialog(getActivity());
+		webView.loadUrl(url);
+		CookieSyncManager.createInstance(getActivity());
+		CookieManager cookieManager = CookieManager.getInstance();
+		cookieManager.removeAllCookie();
+		return builder.create(); 
 	}
+	
+//	private void initWidgets(Dialog dialog) {
+//		LayoutInflater inflater = getActivity().getLayoutInflater();
+//		View view = inflater.inflate(R.layout.fragment_dialog_login, null);
+//		LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.dialogLinearLayout);
+//		textView = new TextView(getActivity());
+//		textView.setText("Login");
+//		textView.setTextColor(Color.WHITE);
+//		textView.setBackgroundColor(Color.BLACK);
+//		textView.setPadding(20, 10, 10, 10);
+//		linearLayout.addView(textView);
+//		
+//		
+//		
+//		DisplayMetrics displaymetrics = new DisplayMetrics();
+//		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+//		int height = displaymetrics.heightPixels;
+//		int width = displaymetrics.widthPixels;
+//		float[] portrait = {width, height};
+//		float[] landscape = {height, width};
+//		
+//		float[] dimensions = (width < height) ? portrait : landscape;
+//		dialog.addContentView(linearLayout, new FrameLayout.LayoutParams((int) (dimensions[0] * 0.95), (int) (dimensions[1] * 0.5)));
+//	}
 	
 	public class AuthWebViewClient extends WebViewClient {
 
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			if (!isShowing) {
+				Log.d("loading page", url);
 				showDialog("Loading...");
 			}
 		}
 
 		public void onPageFinished(WebView view, String url) {
-			String title = webView.getTitle();
-			if (title != null && title.length() > 0) {
-				textView.setText(title);
-			}
 			LoginDialog.this.dismissDialog();
-			Log.d("webview Height", Integer.toString(webView.getHeight()));
-			Log.d("webview Width", Integer.toString(webView.getWidth()));
 		}
 
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {

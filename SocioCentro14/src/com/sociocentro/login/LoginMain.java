@@ -1,6 +1,5 @@
 package com.sociocentro.login;
 
-import com.sociocentro.login.handler.LoginHandler;
 import com.sociocentro.R;
 
 import android.app.Fragment;
@@ -41,8 +40,7 @@ public class LoginMain extends Fragment implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		LoginHandler loginHandler = new LoginHandler(getArguments().getString(ARG_SECTION_NAME), getActivity(), getFragmentManager());
-		loginHandler.setAuthenticationListener(new IAuthListener() {
+		LoginHandler loginHandler = new LoginHandler(getArguments().getString(ARG_SECTION_NAME), getActivity(), getFragmentManager(), new IAuthListener() {
 
 			@Override
 			public void onSuccess() {

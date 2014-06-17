@@ -39,63 +39,66 @@ public class LoginDialog extends DialogFragment{
 		this.url = url;
 		this.authenticationDialogListener = authenticationDialogListener;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
+
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {		
+		Dialog dialog = super.onCreateDialog(savedInstanceState);
+		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+		View view = inflater.inflate(R.layout.fragment_dialog_login, null);
+		builder.setView(view);
+		initWidgets(dialog, view);
+
+		progressDialog = new ProgressDialog(getActivity());
+		webView.loadUrl(url);
+		CookieSyncManager.createInstance(getActivity());
+		CookieManager cookieManager = CookieManager.getInstance();
+		cookieManager.removeAllCookie();
+		return dialog; 
+	}
+
+	private void initWidgets(Dialog dialog, View view) {
+		LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.dialogLinearLayout);
+		textView = new TextView(getActivity());
+		textView.setText("Login");
+		textView.setTextColor(Color.WHITE);
+		textView.setBackgroundColor(Color.BLACK);
+		textView.setPadding(20, 10, 10, 10);
+		linearLayout.addView(textView);
+
 		webView = new WebView(getActivity());
 		webView.setVerticalScrollBarEnabled(true);
 		webView.setHorizontalScrollBarEnabled(true);
 		webView.setLayoutParams(new FrameLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT));
+		linearLayout.addView(webView);
+
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.clearCache(true);  
 		webView.setScrollBarStyle(0);
 		webView.setWebViewClient(new AuthWebViewClient());
 		webView.setWebChromeClient(new AuthWebChromeClient());
-		webView.getSettings().setAllowFileAccess(true);
-		
-		builder.setView(webView);
-		
-		progressDialog = new ProgressDialog(getActivity());
-		webView.loadUrl(url);
-		CookieSyncManager.createInstance(getActivity());
-		CookieManager cookieManager = CookieManager.getInstance();
-		cookieManager.removeAllCookie();
-		return builder.create(); 
+
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
+		float[] portrait = {width, height};
+		float[] landscape = {height, width};
+
+		float[] dimensions = (width < height) ? portrait : landscape;
+		Log.d("webview w x h", (int) (dimensions[0] * 0.95) + " x " + (int) (dimensions[1] * 0.5));
+		dialog.addContentView(linearLayout, new FrameLayout.LayoutParams((int) (dimensions[0] * 0.95), (int) (dimensions[1] * 0.5)));
 	}
-	
-//	private void initWidgets(Dialog dialog) {
-//		LayoutInflater inflater = getActivity().getLayoutInflater();
-//		View view = inflater.inflate(R.layout.fragment_dialog_login, null);
-//		LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.dialogLinearLayout);
-//		textView = new TextView(getActivity());
-//		textView.setText("Login");
-//		textView.setTextColor(Color.WHITE);
-//		textView.setBackgroundColor(Color.BLACK);
-//		textView.setPadding(20, 10, 10, 10);
-//		linearLayout.addView(textView);
-//		
-//		
-//		
-//		DisplayMetrics displaymetrics = new DisplayMetrics();
-//		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-//		int height = displaymetrics.heightPixels;
-//		int width = displaymetrics.widthPixels;
-//		float[] portrait = {width, height};
-//		float[] landscape = {height, width};
-//		
-//		float[] dimensions = (width < height) ? portrait : landscape;
-//		dialog.addContentView(linearLayout, new FrameLayout.LayoutParams((int) (dimensions[0] * 0.95), (int) (dimensions[1] * 0.5)));
-//	}
-	
+
 	public class AuthWebViewClient extends WebViewClient {
 
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
